@@ -2,7 +2,7 @@ package totoro.upong
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import totoro.upong.ui.Terminal
+import totoro.upong.screen.MainMenu
 
 /**
   * Central game class.
@@ -11,27 +11,25 @@ import totoro.upong.ui.Terminal
 
 class Upong extends ApplicationAdapter {
   var batch: SpriteBatch = _
-  var menuTerminal: Terminal = _
+  var menu: MainMenu = _
 
   override def create(): Unit = {
-    batch = new SpriteBatch()
-    menuTerminal = new Terminal(19, 14, Assets.Font.Menu)
-    menuTerminal.println("Ohayou!")
-    menuTerminal.println("This is Upong, mul-tiplayer ping-pong game. Welcome and  enjoy!")
-    menuTerminal.println()
-    menuTerminal.print("> ")
+    batch = new SpriteBatch
+    menu = new MainMenu
   }
 
   override def render(): Unit = {
     // update scene
-    menuTerminal.update()
-
+    menu.update()
     // render scene
     batch.begin()
-    batch.draw(Assets.Tex.MenuBackground, 0, 0, 0, 0, Config.Width, Config.Height)
-    batch.draw(Assets.Tex.Kururi1, 20, 0)
-    batch.draw(Assets.Tex.Logo, Config.Width / 2 - 160, Config.Height - 160)
-    menuTerminal.draw(batch, Config.Width / 2 - 20, 480)
+
+    // background
+    batch.draw(Assets.Tex.Background, 0, 0, 0, 0, Config.Width, Config.Height)
+
+    // screens
+    menu.render(batch)
+
     batch.end()
   }
 

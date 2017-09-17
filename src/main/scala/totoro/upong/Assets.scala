@@ -14,14 +14,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
 object Assets {
   object Tex {
-    val MenuBackground: Texture = new Texture(Gdx.files.internal("tex/menu-back.png"))
-    MenuBackground.setWrap(TextureWrap.Repeat, TextureWrap.Repeat)
+    val Background: Texture = new Texture(Gdx.files.internal("tex/menu-back.png"))
+    Background.setWrap(TextureWrap.Repeat, TextureWrap.Repeat)
     val Kururi1: Texture = new Texture(Gdx.files.internal("tex/kururi-1.png"))
     val Kururi2: Texture = new Texture(Gdx.files.internal("tex/kururi-2.png"))
     val Logo: Texture = new Texture(Gdx.files.internal("tex/logo.png"))
 
     def dispose(): Unit = {
-      MenuBackground.dispose()
+      Background.dispose()
       Kururi1.dispose()
       Kururi2.dispose()
       Logo.dispose()
