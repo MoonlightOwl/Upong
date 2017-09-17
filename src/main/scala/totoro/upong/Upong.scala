@@ -16,6 +16,10 @@ class Upong extends ApplicationAdapter {
   override def create(): Unit = {
     batch = new SpriteBatch()
     menuTerminal = new Terminal(19, 14, Assets.Font.Menu)
+    menuTerminal.println("Ohayou!")
+    menuTerminal.println("This is Upong, mul-tiplayer ping-pong game. Welcome and  enjoy!")
+    menuTerminal.println()
+    menuTerminal.print("> ")
   }
 
   override def render(): Unit = {

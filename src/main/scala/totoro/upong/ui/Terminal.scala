@@ -33,6 +33,32 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
 
   def getCursor: (Int, Int) = (cursorX, cursorY)
 
+  def println(): Unit = print("\n")
+  def println(str: String): Unit = print(str + '\n')
+
+  def print(str: String): Unit = str.foreach(put)
+
+  def put(char: Char): Unit = {
+    if (char == '\n') rewind()
+    else {
+      matrix.set(cursorX, cursorY, char)
+      if (!setCursor(cursorX + 1, cursorY)) rewind()
+    }
+  }
+
+  def rewind(): Unit = {
+    if (!setCursor(0, cursorY + 1)) {
+      shift()
+      setCursor(0, cursorY)
+    }
+  }
+
+  def shift(): Unit = {
+    for (y <- 0 until (height - 1))
+      for (x <- 0 until width)
+        matrix.set(x, y, matrix.get(x, y+1))
+  }
+
   def draw(batch: SpriteBatch, x: Int, y: Int): Unit = {
     matrix.draw(batch, x, y)
   }
