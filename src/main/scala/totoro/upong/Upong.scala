@@ -1,7 +1,6 @@
 package totoro.upong
 
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.{ApplicationAdapter, Gdx}
+import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 class Upong extends ApplicationAdapter {
@@ -12,11 +11,16 @@ class Upong extends ApplicationAdapter {
   }
 
   override def render(): Unit = {
-    Gdx.gl.glClearColor(1, 0, 0, 1)
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+    batch.begin()
+    batch.draw(Assets.Tex.MenuBackground, 0, 0, 0, 0, Config.Width, Config.Height)
+    batch.draw(Assets.Tex.Kururi1, 20, 0)
+    batch.draw(Assets.Tex.Logo, Config.Width / 2 - 160, Config.Height - 160)
+    Assets.Font.Menu.draw(batch, "> loading...", Config.Width / 2 - 20, 450)
+    batch.end()
   }
 
   override def dispose(): Unit = {
     batch.dispose()
+    Assets.dispose()
   }
 }

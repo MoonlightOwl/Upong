@@ -9,6 +9,7 @@ object UpongLauncher {
     config.width = Config.Width
     config.height = Config.Height
     config.title = s"Upong v${BuildInfo.version}"
+    config.resizable = false
     new LwjglApplication(new Upong(), config)
   }
 }

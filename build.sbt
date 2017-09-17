@@ -20,3 +20,11 @@ lazy val upong = (project in file(".")).
       buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
       buildInfoPackage := "upong"
     )
+
+// configure fat jar
+mainClass in assembly := Some("totoro.upong.UpongLauncher")
+test in assembly := {}
+assemblyOutputPath in assembly := file(s"target/${name.value}-${version.value}.jar")
+
+// configure resources
+unmanagedResourceDirectories in Compile += { baseDirectory.value / "assets" }
