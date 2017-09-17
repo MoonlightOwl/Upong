@@ -4,6 +4,11 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import totoro.upong.ui.Terminal
 
+/**
+  * Central game class.
+  * Is responsible for game lifecycle steps.
+  */
+
 class Upong extends ApplicationAdapter {
   var batch: SpriteBatch = _
   var menuTerminal: Terminal = _

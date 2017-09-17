@@ -6,6 +6,12 @@ import com.badlogic.gdx.graphics.Texture.TextureWrap
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
+/**
+  * Assets singleton. All assets are contained inside of thematical sub-objects.
+  * Tex - textures and images, Font - fonts.
+  * Do not forget to dispose assets via `Assets.dispose()` call, at the end of work.
+  */
+
 object Assets {
   object Tex {
     val MenuBackground: Texture = new Texture(Gdx.files.internal("tex/menu-back.png"))
@@ -23,7 +29,8 @@ object Assets {
   }
 
   object Font {
-    private val generator: FreeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/BelshawDonutRobot.ttf"))
+    private val generator: FreeTypeFontGenerator =
+      new FreeTypeFontGenerator(Gdx.files.internal("font/BelshawDonutRobot.ttf"))
     private val parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
     parameter.size = 32
     parameter.color = Color.BLACK
