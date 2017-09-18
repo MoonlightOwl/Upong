@@ -1,36 +1,24 @@
 package totoro.upong
 
-import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import totoro.upong.screen.MainMenu
+import totoro.upong.screen.MainMenuScreen
 
 /**
   * Central game class.
   * Is responsible for game lifecycle steps.
   */
 
-class Upong extends ApplicationAdapter {
+class Upong extends Game {
   var batch: SpriteBatch = _
-  var menu: MainMenu = _
 
   override def create(): Unit = {
     batch = new SpriteBatch
-    menu = new MainMenu
+    this.setScreen(new MainMenuScreen(this))
   }
 
   override def render(): Unit = {
-    // update scene
-    menu.update()
-    // render scene
-    batch.begin()
-
-    // background
-    batch.draw(Assets.Tex.Background, 0, 0, 0, 0, Config.Width, Config.Height)
-
-    // screens
-    menu.render(batch)
-
-    batch.end()
+    super.render()
   }
 
   override def dispose(): Unit = {
