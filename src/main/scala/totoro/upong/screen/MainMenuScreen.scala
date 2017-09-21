@@ -1,6 +1,5 @@
 package totoro.upong.screen
 
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.math.Interpolation
 import totoro.upong.ui.Terminal
 import totoro.upong.{Assets, Config, Upong}
@@ -10,7 +9,7 @@ import totoro.upong.{Assets, Config, Upong}
   * @param game the parent game object
   */
 
-class MainMenuScreen(game: Upong) extends Screen {
+class MainMenuScreen(game: Upong) extends GameScreen {
   private val terminal: Terminal = new Terminal(19, 14, Assets.Font.Menu)
 
   private var step: Int = AnimationStep.In
@@ -24,7 +23,15 @@ class MainMenuScreen(game: Upong) extends Screen {
   terminal.println()
   terminal.print("> ")
 
-  def render(delta: Float): Unit = {
+  override def keyTyped(character: Char): Boolean = {
+    terminal.keyTyped(character)
+  }
+
+  override def keyDown(keycode: Int): Boolean = {
+    terminal.keyDown(keycode)
+  }
+
+  override def render(delta: Float): Unit = {
     if (step == AnimationStep.In && elapsed < total) {
       elapsed += delta
       progress = interpolation.apply(elapsed / total)
@@ -42,14 +49,4 @@ class MainMenuScreen(game: Upong) extends Screen {
     terminal.draw(game.batch, Config.Width / 2 - 20, 440 + (40 * progress).toInt)
     game.batch.end()
   }
-
-  override def resize(width: Int, height: Int) {}
-
-  override def pause() {}
-  override def resume() {}
-
-  override def hide() {}
-  override def show() {}
-
-  override def dispose() {}
 }

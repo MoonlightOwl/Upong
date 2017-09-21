@@ -1,8 +1,8 @@
 package totoro.upong
 
-import com.badlogic.gdx.Game
+import com.badlogic.gdx.{Game, Gdx}
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import totoro.upong.screen.MainMenuScreen
+import totoro.upong.screen.{GameScreen, MainMenuScreen}
 
 /**
   * Central game class.
@@ -14,7 +14,12 @@ class Upong extends Game {
 
   override def create(): Unit = {
     batch = new SpriteBatch
-    this.setScreen(new MainMenuScreen(this))
+    setGameScreen(new MainMenuScreen(this))
+  }
+
+  private def setGameScreen(screen: GameScreen): Unit = {
+    super.setScreen(screen)
+    Gdx.input.setInputProcessor(screen)
   }
 
   override def render(): Unit = {
