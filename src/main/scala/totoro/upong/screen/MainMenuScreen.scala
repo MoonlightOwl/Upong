@@ -1,5 +1,6 @@
 package totoro.upong.screen
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation
 import totoro.upong.ui.Terminal
 import totoro.upong.{Assets, Config, Upong}
@@ -22,6 +23,16 @@ class MainMenuScreen(game: Upong) extends GameScreen {
   terminal.println("This is Upong, mul-tiplayer ping-pong game. Welcome and  enjoy!")
   terminal.println()
   terminal.print("> ")
+
+  terminal.setCommandsProcessor(command => {
+    terminal.println()
+    command match {
+      case "exit" => Gdx.app.exit()
+      case "" =>
+      case _ => terminal.println("command not found")
+    }
+    terminal.print("> ")
+  })
 
   override def keyTyped(character: Char): Boolean = {
     terminal.keyTyped(character)

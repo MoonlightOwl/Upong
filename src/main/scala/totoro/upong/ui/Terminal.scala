@@ -17,6 +17,7 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
   private var cursorY: Int = 0
   private var cursorVisible: Boolean = false
   private var input: String = ""
+  private var commandProcessor: String => Unit = _
 
   private def inBounds(x: Int, y: Int): Boolean = x >= 0 && x < width && y >= 0 && y < height
   private def endOfPhrase(y: Int): Option[Int] = {
@@ -69,6 +70,11 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
     }
   }
 
+
+  // Commands processing
+  def setCommandsProcessor(processor: String => Unit): Unit = commandProcessor = processor
+
+
   // Input features
   def keyTyped(character: Char): Boolean = {
     if (!character.isControl) {
@@ -86,11 +92,16 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
           backspace()
           true
         } else false
+      case Keys.ENTER =>
+        if (commandProcessor != null) commandProcessor(input)
+        input = ""
+        true
       case _ => false
     }
   }
 
   def getInput: String = input
+
 
   // Lifecycle methods
   def update(): Unit = {
