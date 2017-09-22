@@ -1,4 +1,8 @@
-package totoro.upong.screen
+package totoro.upong.ui
+
+/**
+  * Animation steps enum
+  */
 
 object AnimationStep {
   val In = 0
