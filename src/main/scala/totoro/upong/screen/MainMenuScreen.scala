@@ -27,7 +27,7 @@ class MainMenuScreen(game: Upong) extends GameScreen {
   terminal.setCommandsProcessor(command => {
     terminal.println()
     command match {
-      case "exit" => Gdx.app.exit()
+      case "exit" | "quit" | "q" => Gdx.app.exit()
       case "" =>
       case _ => terminal.println("command not found")
     }
@@ -50,8 +50,6 @@ class MainMenuScreen(game: Upong) extends GameScreen {
       step = AnimationStep.Steady
       progress = 1
     }
-
-    terminal.update()
 
     game.batch.begin()
     game.batch.draw(Assets.Tex.Background, 0, 0, 0, 0, Config.Width, Config.Height)

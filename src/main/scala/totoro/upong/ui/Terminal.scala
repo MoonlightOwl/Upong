@@ -1,7 +1,7 @@
 package totoro.upong.ui
 
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.graphics.g2d.{BitmapFont, SpriteBatch}
+import com.badlogic.gdx.graphics.g2d.{BitmapFont, GlyphLayout, SpriteBatch}
 
 /**
   * Special widget that can simulate terminal-like behavior.
@@ -12,10 +12,11 @@ import com.badlogic.gdx.graphics.g2d.{BitmapFont, SpriteBatch}
   */
 
 class Terminal(width: Int, height: Int, font: BitmapFont) {
+  private val LineSpacing: Float = 1.3f
   private val matrix: Matrix = new Matrix(width, height, font)
+  private val layout: GlyphLayout = new GlyphLayout(font, "_")
   private var cursorX: Int = 0
   private var cursorY: Int = 0
-  private var cursorVisible: Boolean = false
   private var input: String = ""
   private var commandProcessor: String => Unit = _
 
@@ -32,6 +33,7 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
   def setCursor(x: Int, y: Int): Boolean = {
     if (inBounds(x, y)) {
       cursorX = x; cursorY = y
+      layout.setText(font, List.fill(x)(' ').mkString)
       true
     } else false
   }
@@ -88,7 +90,6 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
       case Keys.BACKSPACE =>
         if (input.length > 0) {
           input = input.dropRight(1)
-          delete()
           backspace()
           true
         } else false
@@ -104,14 +105,10 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
 
 
   // Lifecycle methods
-  def update(): Unit = {
-    if (System.currentTimeMillis() % 1000 < 500) {
-      if (cursorVisible) { matrix.set(cursorX, cursorY, '_'); cursorVisible = false }
-    } else {
-      if (!cursorVisible) { matrix.set(cursorX, cursorY, ' '); cursorVisible = true }
-    }
-  }
   def draw(batch: SpriteBatch, x: Int, y: Int): Unit = {
     matrix.draw(batch, x, y)
+    if (System.currentTimeMillis() % 1000 < 500) {
+      font.draw(batch, "_", x + layout.width, y - (cursorY * layout.height * LineSpacing).toInt)
+    }
   }
 }
