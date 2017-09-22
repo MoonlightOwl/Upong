@@ -16,6 +16,7 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
   private val LineSpacing: Float = 1.3f
   private val ContinuousPressTimeout: Int = 300
   private val ContinuousTypingTimeout: Float = 0.05f
+  private val MaxHistorySize: Int = 20
 
   private val matrix: Matrix = new Matrix(width, height, font)
   private val layout: GlyphLayout = new GlyphLayout(font, "_")
@@ -27,6 +28,8 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
   private var lastTimeKeyWasPressed: Long = 0
   private var lastKeyPressed: Int = 0
   private var continuousTimer: Float = 0
+  private var history: Seq[String] = Seq()
+  private var historyPosition = -1
 
   private def inBounds(x: Int, y: Int): Boolean = x >= 0 && x < width && y >= 0 && y < height
   private def endOfPhrase(y: Int): Option[Int] = {
@@ -63,10 +66,11 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
     if (!setCursor(cursorX - 1, cursorY))
       if (!setCursor(endOfPhrase(cursorY - 1).getOrElse(0), cursorY - 1))
         setCursor(0, 0)
-    delete()
-  }
-  def delete(): Unit = {
     matrix.set(cursorX, cursorY, ' ')
+  }
+  def clearInput(): Unit = {
+    input.foreach(_ => backspace())
+    input = ""
   }
 
   def println(): Unit = print("\n")
@@ -108,12 +112,36 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
         } else false
       case Keys.ENTER =>
         if (commandProcessor != null) commandProcessor(input)
+        historyPosition = -1
+        addToHistory(input)
         input = ""
         true
+      case Keys.UP =>
+        if (historyPosition < history.size - 1 && history.nonEmpty) {
+          historyPosition += 1
+          clearInput()
+          input = history(historyPosition)
+          print(input)
+          true
+        } else false
+      case Keys.DOWN =>
+        if (historyPosition > -1) {
+          historyPosition -= 1
+          clearInput()
+          if (historyPosition >= 0) {
+            input = history(historyPosition)
+            print(input)
+          }
+          true
+        } else false
       case _ => false
     }
 
   def getInput: String = input
+
+  private def addToHistory(command: String): Unit = {
+    history = command +: (if (history.size > MaxHistorySize) history.drop(1) else history)
+  }
 
 
   // Lifecycle methods
