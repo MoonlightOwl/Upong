@@ -1,5 +1,6 @@
 package totoro.upong.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.{BitmapFont, GlyphLayout, SpriteBatch}
 
@@ -13,12 +14,19 @@ import com.badlogic.gdx.graphics.g2d.{BitmapFont, GlyphLayout, SpriteBatch}
 
 class Terminal(width: Int, height: Int, font: BitmapFont) {
   private val LineSpacing: Float = 1.3f
+  private val ContinuousPressTimeout: Int = 300
+  private val ContinuousTypingTimeout: Float = 0.05f
+
   private val matrix: Matrix = new Matrix(width, height, font)
   private val layout: GlyphLayout = new GlyphLayout(font, "_")
+
   private var cursorX: Int = 0
   private var cursorY: Int = 0
   private var input: String = ""
   private var commandProcessor: String => Unit = _
+  private var lastTimeKeyWasPressed: Long = 0
+  private var lastKeyPressed: Int = 0
+  private var continuousTimer: Float = 0
 
   private def inBounds(x: Int, y: Int): Boolean = x >= 0 && x < width && y >= 0 && y < height
   private def endOfPhrase(y: Int): Option[Int] = {
@@ -86,6 +94,11 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
     } else false
   }
   def keyDown(keycode: Int): Boolean = {
+    lastTimeKeyWasPressed = System.currentTimeMillis()
+    lastKeyPressed = keycode
+    processKeyDown(keycode)
+  }
+  private def processKeyDown(keycode: Int): Boolean =
     keycode match {
       case Keys.BACKSPACE =>
         if (input.length > 0) {
@@ -99,12 +112,24 @@ class Terminal(width: Int, height: Int, font: BitmapFont) {
         true
       case _ => false
     }
-  }
 
   def getInput: String = input
 
 
   // Lifecycle methods
+  def update(dt: Float): Unit = {
+    if (Gdx.input.isKeyPressed(lastKeyPressed)) {
+      val millis = System.currentTimeMillis()
+      if (millis - lastTimeKeyWasPressed > ContinuousPressTimeout) {
+        continuousTimer += dt
+        if (continuousTimer > ContinuousTypingTimeout) {
+          continuousTimer -= ContinuousTypingTimeout
+          processKeyDown(lastKeyPressed)
+        }
+      }
+    }
+  }
+
   def draw(batch: SpriteBatch, x: Int, y: Int): Unit = {
     matrix.draw(batch, x, y)
     if (System.currentTimeMillis() % 1000 < 500) {

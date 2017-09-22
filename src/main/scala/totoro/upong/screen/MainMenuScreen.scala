@@ -51,6 +51,8 @@ class MainMenuScreen(game: Upong) extends GameScreen {
       progress = 1
     }
 
+    terminal.update(delta)
+
     game.batch.begin()
     game.batch.draw(Assets.Tex.Background, 0, 0, 0, 0, Config.Width, Config.Height)
     game.batch.draw(Assets.Tex.Logo, Config.Width / 2 - 160, Config.Height - 160 * progress)
