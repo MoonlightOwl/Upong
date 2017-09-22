@@ -26,7 +26,11 @@ class MainMenuScreen(game: Upong) extends GameScreen {
 
   terminal.setCommandsProcessor(command => {
     terminal.println()
-    command match {
+    command.toLowerCase match {
+      case "help" | "h" | "man" | "?" | "wtf" =>
+        terminal.print("available commands:")
+        terminal.println("exit - leave this")
+        terminal.println("       game")
       case "exit" | "quit" | "q" => Gdx.app.exit()
       case "" =>
       case _ => terminal.println("command not found")
